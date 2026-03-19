@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌙 Eid Mubarak — ABAKAR MAHAMAT BRAHIM</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #d4a843;
+    --gold2: #f0cc70;
+    --deep: #06080f;
+    --dark: #0d1020;
+    --card-bg: rgba(20, 24, 48, 0.85);
+    --text: #f5ead8;
+    --muted: #8899aa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--deep);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* ── Canvas stars ── */
+  #stars-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── Lanterns ── */
+  .lanterns {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 100px;
+    z-index: 1;
+    pointer-events: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+  }
+
+  .lantern {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: swingLantern 4s ease-in-out infinite;
+    transform-origin: top center;
+  }
+  .lantern:nth-child(2) { animation-delay: 0.6s; }
+  .lantern:nth-child(3) { animation-delay: 1.2s; }
+  .lantern:nth-child(4) { animation-delay: 0.3s; }
+  .lantern:nth-child(5) { animation-delay: 0.9s; }
+
+  @keyframes swingLantern {
+    0%, 100% { transform: rotate(-8deg); }
+    50%       { transform: rotate(8deg); }
+  }
+
+  .lantern-string {
+    width: 1px;
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(212,168,67,0.5), rgba(212,168,67,0.2));
+  }
+
+  .lantern-body {
+    width: 22px;
+    height: 32px;
+    background: radial-gradient(ellipse at 40% 35%, #ffe066, #d4841a 70%, #8b4500);
+    border-radius: 4px 4px 6px 6px;
+    box-shadow: 0 0 14px 6px rgba(255,180,30,0.45), 0 0 30px 10px rgba(255,140,0,0.2);
+    position: relative;
+  }
+  .lantern-body::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 8px;
+    background: rgba(212,168,67,0.6);
+  }
+
+  /* ── Particle container ── */
+  #particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(0) scale(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(-100vh) scale(1.4); opacity: 0; }
+  }
+
+  /* ── SCREEN 1: Click to open ── */
+  #screen-intro {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 24px;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.6s ease;
+  }
+
+  #screen-intro .moon-big {
+    font-size: 90px;
+    display: block;
+    animation: floatMoon 3.5s ease-in-out infinite, glowPulse 3.5s ease-in-out infinite;
+    margin-bottom: 24px;
+    filter: drop-shadow(0 0 30px rgba(212,168,67,0.7));
+  }
+
+  @keyframes floatMoon {
+    0%, 100% { transform: translateY(0) rotate(-6deg); }
+    50%       { transform: translateY(-14px) rotate(6deg); }
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(212,168,67,0.5)); }
+    50%       { filter: drop-shadow(0 0 40px rgba(212,168,67,0.9)); }
+  }
+
+  #screen-intro .from-label {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  #screen-intro .sender {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(18px, 4.5vw, 28px);
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(212,168,67,0.5);
+    margin-bottom: 40px;
+    line-height: 1.4;
+  }
+
+  .tap-btn {
+    position: relative;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .tap-ring {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid rgba(212,168,67,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    animation: ringPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes ringPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(212,168,67,0.5), 0 0 0 10px rgba(212,168,67,0.15); border-color: rgba(212,168,67,0.5); }
+    50%       { box-shadow: 0 0 0 14px rgba(212,168,67,0), 0 0 0 28px rgba(212,168,67,0); border-color: var(--gold); }
+  }
+
+  .tap-ring::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,168,67,0.15);
+    animation: ringPulse2 2s ease-in-out infinite;
+  }
+
+  @keyframes ringPulse2 {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50%       { transform: scale(1.1); opacity: 0.2; }
+  }
+
+  .tap-icon {
+    font-size: 36px;
+    animation: tapBounce 1.5s ease-in-out infinite;
+  }
+
+  @keyframes tapBounce {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.12); }
+  }
+
+  .tap-label {
+    font-family: 'Amiri', serif;
+    font-size: 15px;
+    color: rgba(212,168,67,0.8);
+    letter-spacing: 1px;
+  }
+
+  .tap-label-ar {
+    font-family: 'Amiri', serif;
+    font-size: 13px;
+    color: rgba(212,168,67,0.55);
+    direction: rtl;
+  }
+
+  /* ── SCREEN 2: Message ── */
+  #screen-msg {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+    overflow-y: auto;
+  }
+
+  #screen-msg.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .msg-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(212,168,67,0.25);
+    border-radius: 28px;
+    padding: 38px 32px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(212,168,67,0.1);
+    transform: translateY(30px) scale(0.95);
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .msg-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(212,168,67,0.08), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .msg-card::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; right: -40px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(212,168,67,0.06), transparent 70%);
+    border-radius: 50%;
+  }
+
+  #screen-msg.visible .msg-card {
+    transform: translateY(0) scale(1);
+  }
+
+  .ornament {
+    font-size: 13px;
+    letter-spacing: 8px;
+    color: rgba(212,168,67,0.5);
+    margin-bottom: 18px;
+    animation: fadeInUp 0.8s 0.3s ease both;
+  }
+
+  .eid-title-ar {
+    font-family: 'Amiri', serif;
+    font-size: clamp(28px, 7vw, 42px);
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(212,168,67,0.5);
+    direction: rtl;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    animation: fadeInUp 0.8s 0.4s ease both;
+  }
+
+  .eid-title-fr {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(14px, 3.5vw, 20px);
+    color: rgba(212,168,67,0.75);
+    letter-spacing: 3px;
+    margin-bottom: 28px;
+    animation: fadeInUp 0.8s 0.5s ease both;
+  }
+
+  .divider-ornament {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin: 0 auto 24px;
+    animation: fadeInUp 0.8s 0.55s ease both;
+  }
+  .divider-ornament::before, .divider-ornament::after {
+    content: '';
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,168,67,0.5));
+  }
+  .divider-ornament::after { background: linear-gradient(90deg, rgba(212,168,67,0.5), transparent); }
+  .divider-ornament span { color: var(--gold); font-size: 14px; }
+
+  .msg-ar {
+    font-family: 'Amiri', serif;
+    font-size: clamp(16px, 4vw, 20px);
+    line-height: 2;
+    direction: rtl;
+    text-align: right;
+    color: var(--text);
+    margin-bottom: 22px;
+    animation: fadeInUp 0.8s 0.6s ease both;
+  }
+
+  .divider-ornament2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin: 0 auto 22px;
+    animation: fadeInUp 0.8s 0.65s ease both;
+  }
+  .divider-ornament2::before, .divider-ornament2::after {
+    content: '';
+    width: 40px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,168,67,0.3));
+  }
+  .divider-ornament2::after { background: linear-gradient(90deg, rgba(212,168,67,0.3), transparent); }
+  .divider-ornament2 span { color: rgba(212,168,67,0.4); font-size: 11px; }
+
+  .msg-fr {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: clamp(14px, 3.5vw, 16px);
+    line-height: 1.85;
+    color: rgba(245,234,216,0.85);
+    margin-bottom: 28px;
+    animation: fadeInUp 0.8s 0.7s ease both;
+  }
+
+  .sender-footer {
+    border-top: 1px solid rgba(212,168,67,0.12);
+    padding-top: 20px;
+    animation: fadeInUp 0.8s 0.85s ease both;
+  }
+
+  .sender-footer .from {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .sender-footer .name {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(13px, 3vw, 17px);
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 15px rgba(212,168,67,0.4);
+  }
+
+  .emojis-row {
+    font-size: 22px;
+    letter-spacing: 6px;
+    margin-top: 16px;
+    animation: fadeInUp 0.8s 0.9s ease both;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Fireworks */
+  .firework {
+    position: fixed;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 30;
+    animation: burst 0.9s ease-out forwards;
+  }
+  @keyframes burst {
+    0%   { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+
+<div id="particles"></div>
+
+<!-- Lanterns -->
+<div class="lanterns">
+  <div class="lantern"><div class="lantern-string"></div><div class="lantern-body"></div></div>
+  <div class="lantern"><div class="lantern-string"></div><div class="lantern-body"></div></div>
+  <div class="lantern"><div class="lantern-string"></div><div class="lantern-body"></div></div>
+  <div class="lantern"><div class="lantern-string"></div><div class="lantern-body"></div></div>
+  <div class="lantern"><div class="lantern-string"></div><div class="lantern-body"></div></div>
+</div>
+
+<!-- Screen 1: Intro -->
+<div id="screen-intro" onclick="openMessage()">
+  <span class="moon-big">🌙</span>
+  <p class="from-label">Message de</p>
+  <p class="sender">ABAKAR MAHAMAT BRAHIM</p>
+  <div class="tap-btn">
+    <div class="tap-ring">
+      <span class="tap-icon">✉️</span>
+    </div>
+    <p class="tap-label">Appuie pour ouvrir ton message</p>
+    <p class="tap-label-ar">اضغط لفتح رسالتك</p>
+  </div>
+</div>
+
+<!-- Screen 2: Message -->
+<div id="screen-msg">
+  <div class="msg-card">
+    <p class="ornament">✦ ✦ ✦</p>
+
+    <h1 class="eid-title-ar">عيد فطر مبارك سعيد 🌙</h1>
+    <h2 class="eid-title-fr">EID EL-FITR MUBARAK</h2>
+
+    <div class="divider-ornament"><span>☽</span></div>
+
+    <p class="msg-ar">
+      تقبّل الله منا ومنكم صالح الأعمال،<br>
+      وكل عام وأنتم بخير وسعادة وعافية.<br>
+      يارب يجمعنا دائماً على خير ومحبة 🤲
+    </p>
+
+    <div class="divider-ornament2"><span>✦</span></div>
+
+    <p class="msg-fr">
+      Que ce jour béni vous apporte joie, paix<br>
+      et bonheur à vous et à toute votre famille.<br>
+      Que Allah accepte vos jeûnes et vos prières. 🤍
+    </p>
+
+    <div class="emojis-row">🌙 ✨ 🎊 ✨ 🌙</div>
+
+    <div class="sender-footer">
+      <p class="from">Avec toute mon affection — بكل محبة</p>
+      <p class="name">ABAKAR MAHAMAT BRAHIM</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Stars canvas ──
+  const canvas = document.getElementById('stars-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initStars();
+  }
+
+  function initStars() {
+    stars = [];
+    for (let i = 0; i < 160; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5 + 0.2,
+        a: Math.random(),
+        speed: Math.random() * 0.008 + 0.003,
+        phase: Math.random() * Math.PI * 2,
+        gold: Math.random() > 0.65
+      });
+    }
+  }
+
+  function drawStars(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      const alpha = s.a * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = s.gold
+        ? `rgba(212,168,67,${alpha})`
+        : `rgba(255,255,255,${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+  requestAnimationFrame(drawStars);
+
+  // ── Floating particles ──
+  const particleContainer = document.getElementById('particles');
+  const colors = ['#d4a843','#f0cc70','#ffffff','#ffe29e','#ffd060'];
+
+  function createParticle() {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    const size = Math.random() * 5 + 2;
+    el.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      bottom:-10px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${Math.random()*6+5}s;
+      animation-delay:${Math.random()*4}s;
+      opacity:0;
+    `;
+    particleContainer.appendChild(el);
+    setTimeout(() => el.remove(), 12000);
+  }
+
+  setInterval(createParticle, 400);
+
+  // ── Open message ──
+  function openMessage() {
+    const intro = document.getElementById('screen-intro');
+    const msg   = document.getElementById('screen-msg');
+
+    intro.style.opacity = '0';
+    intro.style.pointerEvents = 'none';
+
+    setTimeout(() => {
+      intro.style.display = 'none';
+      msg.classList.add('visible');
+      launchFireworks();
+    }, 500);
+  }
+
+  // ── Fireworks ──
+  function launchFireworks() {
+    const positions = [
+      { x: '20%', y: '25%' },
+      { x: '80%', y: '20%' },
+      { x: '50%', y: '15%' },
+      { x: '15%', y: '60%' },
+      { x: '85%', y: '55%' },
+    ];
+
+    positions.forEach((pos, i) => {
+      setTimeout(() => {
+        const cx = (parseFloat(pos.x) / 100) * window.innerWidth;
+        const cy = (parseFloat(pos.y) / 100) * window.innerHeight;
+        for (let j = 0; j < 18; j++) {
+          const angle = (j / 18) * Math.PI * 2;
+          const dist  = Math.random() * 80 + 40;
+          const fw = document.createElement('div');
+          fw.className = 'firework';
+          fw.style.cssText = `
+            left:${cx}px; top:${cy}px;
+            background:${colors[Math.floor(Math.random()*colors.length)]};
+            --tx:${Math.cos(angle)*dist}px;
+            --ty:${Math.sin(angle)*dist}px;
+            box-shadow: 0 0 6px 2px ${colors[Math.floor(Math.random()*colors.length)]};
+          `;
+          document.body.appendChild(fw);
+          setTimeout(() => fw.remove(), 1000);
+        }
+      }, i * 300);
+    });
+  }
+</script>
+</body>
+</html>
